@@ -10,13 +10,32 @@
   html,body{height:100%}
   body{font-family:system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;color:var(--ink);
     background:radial-gradient(ellipse 90% 70% at 50% -10%,#3a2f6e 0%,#17153a 55%,#0b0a20 100%);
-    min-height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;
-    text-align:center;padding:40px 22px;overflow-x:hidden}
-  .earth{width:120px;height:120px;border-radius:50%;margin-bottom:30px;
-    background:radial-gradient(circle at 35% 30%,#4ECDC4 0%,#2b6db0 40%,#1b2b6b 80%);
+    min-height:100%;position:relative;overflow:hidden;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:40px 22px}
+
+  /* ── dynamic themed background ── */
+  .bg{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}
+  .bg .drift{animation:drift 26s ease-in-out infinite alternate}
+  @keyframes drift{from{transform:translate(0,0)}to{transform:translate(-18px,-14px)}}
+  .star{fill:#cfc7ee;opacity:.0}
+  .tw1{animation:tw 3.2s ease-in-out infinite}.tw2{animation:tw 4.6s ease-in-out infinite .8s}
+  .tw3{animation:tw 5.4s ease-in-out infinite 1.6s}
+  @keyframes tw{0%,100%{opacity:.12}50%{opacity:.6}}
+  .content{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center}
+
+  /* ── Earth with orbit ── */
+  .system{position:relative;width:170px;height:170px;margin-bottom:26px}
+  .orbit{position:absolute;inset:0;border:1px dashed rgba(150,130,210,.45);border-radius:50%;
+    animation:spin 16s linear infinite}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .orbit .planet{position:absolute;top:-5px;left:50%;width:10px;height:10px;border-radius:50%;
+    background:var(--amber);box-shadow:0 0 12px var(--amber);transform:translateX(-50%)}
+  .earth{position:absolute;top:25px;left:25px;width:120px;height:120px;border-radius:50%;
+    background:radial-gradient(circle at 35% 30%,#4ECDC4 0%,#2b6db0 42%,#1b2b6b 82%);
     box-shadow:0 0 60px rgba(78,205,196,.35),inset -12px -12px 40px rgba(0,0,0,.5)}
+
   .kicker{letter-spacing:.34em;font-size:12px;color:var(--teal);text-transform:uppercase;font-weight:700}
-  h1{font-size:clamp(26px,5vw,44px);line-height:1.15;margin:12px 0 6px;max-width:14ch;
+  h1{font-size:clamp(26px,5vw,44px);line-height:1.15;margin:12px 0 6px;max-width:15ch;
     background:linear-gradient(100deg,var(--teal),#c9b6ee 55%,var(--amber));
     -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
   .ar{direction:rtl;font-size:clamp(18px,3.6vw,26px);color:#d9d2f2;margin-bottom:14px}
@@ -24,18 +43,56 @@
   .soon{display:inline-block;border:1px solid rgba(150,130,210,.5);border-radius:22px;
     padding:9px 20px;color:#efeafc;font-size:14px;background:rgba(123,94,167,.2)}
   .soon .ar{display:inline;direction:rtl;font-size:14px;color:#efeafc;margin:0}
-  footer{margin-top:34px;color:var(--dim);font-size:12.5px;line-height:1.9}
+  footer{position:relative;z-index:2;margin-top:34px;color:var(--dim);font-size:12.5px;line-height:1.9}
   footer .rule{color:#cfc7ee}
-  a{color:var(--teal);text-decoration:none}
 </style>
 </head>
 <body>
-  <div class="earth"></div>
-  <div class="kicker">Mawhiba × King Saud University</div>
-  <h1>Applications of Data Science &amp; AI in Science</h1>
-  <div class="ar">تطبيقات علم البيانات والذكاء الاصطناعي في العلوم</div>
-  <p class="tag">A journey from Earth's climate to the cosmos — where every number is a question posed to nature, and every chart an answer you can defend.</p>
-  <div class="soon">The full interactive book is on its way &nbsp;·&nbsp; <span class="ar">الكتاب التفاعلي الكامل قادم قريباً بإذن الله</span></div>
+  <!-- themed background: a rising trend line, scatter cloud, a signal wave, orbit rings, stars -->
+  <svg class="bg" viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+    <g class="drift">
+      <!-- concentric orbit rings, top-right -->
+      <g fill="none" stroke="#7B5EA7" stroke-opacity="0.10">
+        <circle cx="1230" cy="150" r="70"/><circle cx="1230" cy="150" r="130"/><circle cx="1230" cy="150" r="200"/>
+      </g>
+      <!-- scatter cloud (data points), mid-left -->
+      <g fill="#4ECDC4" fill-opacity="0.10">
+        <circle cx="180" cy="430" r="5"/><circle cx="230" cy="470" r="4"/><circle cx="150" cy="500" r="6"/>
+        <circle cx="270" cy="440" r="3"/><circle cx="205" cy="520" r="5"/><circle cx="300" cy="500" r="4"/>
+        <circle cx="120" cy="460" r="3"/><circle cx="255" cy="410" r="4"/><circle cx="330" cy="470" r="3"/>
+      </g>
+      <!-- a smooth rising trend line across the lower third -->
+      <path d="M0,780 C300,760 480,700 700,650 C980,585 1160,470 1440,360"
+            fill="none" stroke="#F4C842" stroke-opacity="0.14" stroke-width="3"/>
+      <!-- a signal wave (signal in the noise) -->
+      <path d="M0,300 Q90,240 180,300 T360,300 T540,300 T720,300 T900,300"
+            fill="none" stroke="#c9b6ee" stroke-opacity="0.10" stroke-width="2"/>
+      <!-- a small bar chart, lower-right -->
+      <g fill="#7B5EA7" fill-opacity="0.10">
+        <rect x="1120" y="760" width="22" height="60"/><rect x="1150" y="730" width="22" height="90"/>
+        <rect x="1180" y="700" width="22" height="120"/><rect x="1210" y="660" width="22" height="160"/>
+      </g>
+    </g>
+    <!-- twinkling stars -->
+    <g class="star">
+      <circle class="tw1" cx="380" cy="120" r="1.6"/><circle class="tw2" cx="640" cy="90" r="2"/>
+      <circle class="tw3" cx="900" cy="140" r="1.4"/><circle class="tw1" cx="1080" cy="80" r="1.8"/>
+      <circle class="tw2" cx="120" cy="200" r="1.5"/><circle class="tw3" cx="1320" cy="620" r="2"/>
+      <circle class="tw1" cx="520" cy="820" r="1.6"/><circle class="tw2" cx="960" cy="760" r="1.4"/>
+    </g>
+  </svg>
+
+  <div class="content">
+    <div class="system">
+      <div class="orbit"><span class="planet"></span></div>
+      <div class="earth"></div>
+    </div>
+    <div class="kicker">Mawhiba × King Saud University</div>
+    <h1>Applications of Data Science &amp; AI in Science</h1>
+    <div class="ar">تطبيقات علم البيانات والذكاء الاصطناعي في العلوم</div>
+    <p class="tag">A journey from Earth's climate to the cosmos — where every number is a question posed to nature, and every chart an answer you can defend.</p>
+    <div class="soon">The full interactive book is on its way &nbsp;·&nbsp; <span class="ar">الكتاب التفاعلي الكامل قادم قريباً بإذن الله</span></div>
+  </div>
   <footer>
     <div class="rule">A course for gifted students · صالح بالطيور — Saleh Baltyuor</div>
     <div>This page will grow into the complete book at the same address. Bookmark it.</div>
